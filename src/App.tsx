@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Outlet } from 'react-router-dom'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import BlogList from '@/components/BlogList'
+import BlogDetail from '@/components/BlogDetail'
+import CreateBlog from '@/components/CreateBlog'
+import DefaultView from '@/components/DefaultView'
+
+function Layout() {
+  return (
+    <div className="flex flex-col h-screen bg-background overflow-hidden font-sans antialiased text-foreground selection:bg-primary/20">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="hidden md:flex flex-col w-[320px] lg:w-[400px] border-r bg-card/50 overflow-y-auto shrink-0 transition-all duration-300">
+          <BlogList />
+        </aside>
+        <main className="flex-1 overflow-y-auto bg-background/50 relative scroll-smooth">
+          <div className="min-h-full flex flex-col">
+            <div className="flex-1 p-0 md:p-6 lg:p-8">
+              <Outlet />
+            </div>
+            <Footer />
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+         <Route index element={<DefaultView />} />
+         <Route path="blogs/:id" element={<BlogDetail />} />
+         <Route path="create" element={<CreateBlog />} />
+      </Route>
+    </Routes>
   )
 }
 
